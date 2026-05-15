@@ -59,8 +59,10 @@ public class Exercises {
      * @return the head of the list with the last element removed
      */
     public static ListNode removeLast(ListNode head) {
-        if (head == null) return null;
-        if (head.next == null) return null;
+        if (head == null)
+            return null;
+        if (head.next == null)
+            return null;
         ListNode current = head;
 
         // Find the node before the last node
@@ -116,7 +118,24 @@ public class Exercises {
      *         removed
      */
     public static ListNode removeMin(ListNode head) {
-        return null;
+        if (head == null || head.next == null)
+            return null;
+
+        int minValue = min(head);
+        if (head.data == minValue)
+            return head.next;
+
+        ListNode current = head;
+
+        while (current.next != null) {
+            if (current.next.data == minValue) {
+                current.next = current.next.next;
+                break;
+            }
+            current = current.next;
+        }
+
+        return head;
     }
 
     /**
@@ -141,7 +160,19 @@ public class Exercises {
      * @return whether the values in bigList are twice the values in smallList
      */
     public static boolean isDoubled(ListNode smallList, ListNode bigList) {
-        return false;
+        if (smallList == null && bigList == null)
+            return true;
+
+        ListNode smallNode = smallList;
+        ListNode bigNode = bigList;
+
+        while (smallNode != null && bigNode != null) {
+            if (smallNode.data * 2 != bigNode.data)
+                return false;
+            smallNode = smallNode.next;
+            bigNode = bigNode.next;
+        }
+        return (smallNode == null && bigNode == null);
     }
 
     /**
@@ -159,6 +190,36 @@ public class Exercises {
      * @return the head of the new list after k rotations to the left
      */
     public static ListNode rotateLeft(ListNode head, int k) {
-        return null;
+        if (head == null)
+            return null;
+
+        int listLength = length(head);
+        while (k > listLength) {
+            k-=listLength;
+        } 
+
+        // The new head will be the element k indicies next 
+        ListNode newHead = head;
+        ListNode newTail = head;
+        for (int i = 0; i < k; i++) {
+            // The node right before the newHead should have next set to null
+            if (i == k-1) newTail = newHead;
+            newHead = newHead.next;
+            if (newHead == null) return head;
+        }
+
+        // Get the old tail of the list
+        ListNode oldTail = newHead;
+        while (oldTail.next != null) {
+            oldTail = oldTail.next;
+        }
+
+        // Attach the old head to the old tail
+        oldTail.next = head;
+
+        // Cut the new head from the new tail
+        newTail.next = null;
+
+        return newHead;
     }
 }
